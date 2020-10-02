@@ -1,0 +1,14 @@
+{
+  "name": "task1-caesar",
+  "version": "1.0.0",
+  "description": "caesar",
+  "main": "index.js",
+  "scripts": {
+    "test": "node my_caesar_cli -a encode -s 7 -i ./input.txt  -o ./output.txt"
+  },
+  "author": "Andrey Amelchenia",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^6.1.0"
+  }
+}
