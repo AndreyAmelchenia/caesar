@@ -26,5 +26,10 @@ npm test ("node my_caesar_cli -a encode -s 7 -i ./input.txt  -o ./output.txt")
 
 ## ✨ Особенности
 + **-s, --shift** и **-a, --action** - обязательны для ввода;
-+  **-i, --input** - имеет default input.txt и проверку на существование файла 
-+ **-o, --output** - имеет default output.txt и проверку на существование файла
++  **-i, --input** - имеет default stdin и проверку на существование файла 
++ **-o, --output** - имеет default stdout и проверку на существование файла
+
+## Примеры использования
++ **node my_caesar_cli -a encode -s 7 -i  -o ./output.txt** зайдет **stdin** и будет записывать в файл для выхода нажмите Ctrl + C
++ **node my_caesar_cli -a encode -s 7 -i  -o** зайдет **stdin** и будет выводить в **stdout** в файл для выхода нажмите Ctrl + C
++ **node my_caesar_cli -a encode -s 7 -i ./input.txt  -o** прочитает входной файл и будет выводить в **stdout** в файл для выхода нажмите Ctrl + C

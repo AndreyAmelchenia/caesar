@@ -17,10 +17,8 @@ if (process.argv[process.argv.indexOf('--shift') + 1] < 0 || process.argv[proces
   shift = process.argv[process.argv.indexOf('--shift') + 1];
   process.argv.splice(process.argv.indexOf('--shift') + 1, 1);
   command.parse(process.argv);
-  console.log('command.input1', command);
 } else {
   command.parse(process.argv);
-  console.log('command.input2', command.shift);
   shift = command.shift;
 }
 

@@ -1,5 +1,5 @@
 module.exports = (chunk, shift, coder) => {
-  const shiftCoder = coder === 'encode' ? shift : (-shift);
+  const shiftCoder = coder === 'encode' ? shift : coder === 'decode' && (-shift);
   return chunk.map((element) => {
     if(element >= 65 &&  element <= 90) {
       if(element + shiftCoder < 65) {
