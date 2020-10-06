@@ -1,16 +1,15 @@
 const fs = require('fs');
 const path = require('path')
 const { pipeline } = require('stream');
-const { Command } = require('commander');
+const { Command, program } = require('commander');
 const Transform = require('./Transform.js');
 
 const command = new Command();
 
 command.storeOptionsAsProperties(true)
-command
   .option('-s, --shift [shift]', 'shift', 0)
-  .option('-i, --input [type]', 'input file', 'input.txt')
-  .option('-o, --output [type]', 'output file', 'output.txt')
+  .option('-i, --input [type]', 'input file',0)
+  .option('-o, --output [type]', 'output file', 0)
   .option('-a, --action [action]', 'encode or decode', 0);
 
 let shift;
@@ -18,28 +17,41 @@ if (process.argv[process.argv.indexOf('--shift') + 1] < 0 || process.argv[proces
   shift = process.argv[process.argv.indexOf('--shift') + 1];
   process.argv.splice(process.argv.indexOf('--shift') + 1, 1);
   command.parse(process.argv);
+  console.log('command.input1', command);
 } else {
   command.parse(process.argv);
+  console.log('command.input2', command.shift);
   shift = command.shift;
 }
 
-
-if(!fs.existsSync(path.join(__dirname, command.input))){
-  console.error(`no file ${command.input}`);
-  return;
+let input_stream;
+if( command.input ) {
+  if(!fs.existsSync(path.join(__dirname, command.input))){
+    console.error(`no file ${command.input}`);
+    return;
+  }
+  const input_stream_data = [path.join(__dirname, command.input), 'utf8'];
+  input_stream = fs.createReadStream(...input_stream_data);
+} else {
+  input_stream = process.stdin;
 }
-if(!fs.existsSync(path.join(__dirname, command.output))){
-  console.error(`no file ${command.output}`);
-  return;
-} 
 
-const input_stream_data = [path.join(__dirname, command.input), 'utf8'];
+let output_stream;
+if( command.output ) {
+  if(!fs.existsSync(path.join(__dirname, command.output))){
+    console.error(`no file ${command.output}`);
+    return;
+  } 
+  const output_stream_data = path.join(__dirname, command.output);
+  output_stream = fs.createWriteStream(output_stream_data, {flags: 'a+'});
+} else {
+  output_stream = process.stdout;
+}
+
+
 const transform_stream_data = [Number(shift), command.action];
-const output_stream_data = path.join(__dirname, command.output);
-
-const input_stream = fs.createReadStream(...input_stream_data);
 const transform_stream = new Transform(...transform_stream_data);
-const output_stream = fs.createWriteStream(output_stream_data, {flags: 'a+'});
+
 
 pipeline(
   input_stream,
